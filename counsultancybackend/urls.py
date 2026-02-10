@@ -4,6 +4,21 @@ from rest_framework.routers import DefaultRouter
 from event.api.v1.views import EventViewSet, EventTypeViewSet
 from blog.api.v1.views import BlogViewSet, BlogTypeViewSet
 from contact.api.v1.views import ContactViewSet
+from country.api.v1.views import CountryViewSet, UniversityViewSet, PopularCourseViewSet, StudyCostViewSet, LivingExpenseViewSet, VisaRequirementViewSet
+from testperperation.api.v1.router import (
+    TestPreparationViewSet,
+    TestCardViewSet,
+    WhyChooseViewSet,
+    TestFormatViewSet,
+    CourseCurriculumViewSet,
+    CoursePricingViewSet,
+)
+from home.api.v1.router import (
+    StudyAbroadCardListAPIView,
+    SuccessStoryCardListAPIView,
+    SocialMediaListAPIView,
+    ContactInfoListAPIView
+)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -23,6 +38,19 @@ router.register(r'event-types', EventTypeViewSet, basename='event-type')
 router.register(r'blogs', BlogViewSet, basename='blog')
 router.register(r'blog-types', BlogTypeViewSet, basename='blog-type')
 router.register(r'contacts', ContactViewSet, basename='contact')
+router.register(r'countries', CountryViewSet, basename='country')
+router.register(r'universities', UniversityViewSet, basename='university')
+router.register(r'popular-courses', PopularCourseViewSet, basename='popular-course')
+router.register(r'study-costs', StudyCostViewSet, basename='study-cost')
+router.register(r'living-expenses', LivingExpenseViewSet, basename='living-expense')
+router.register(r'visa-requirements', VisaRequirementViewSet, basename='visa-requirement')
+router.register(r"test-preparations", TestPreparationViewSet, basename="test-prep")
+router.register(r"test-cards", TestCardViewSet, basename="test-card")
+router.register(r"why-choose", WhyChooseViewSet, basename="why-choose")
+router.register(r"test-formats", TestFormatViewSet, basename="test-format")
+router.register(r"curriculum", CourseCurriculumViewSet, basename="curriculum")
+router.register(r"pricing", CoursePricingViewSet, basename="pricing")
+
 
 urlpatterns = [
     path('admin/', include('filehub.urls')),
@@ -36,7 +64,7 @@ urlpatterns = [
     # API v1
     path("api/v1/event/", include("event.api.v1.urls")),
     path("api/v1/blog/", include("blog.api.v1.urls")),
-
+    path("api/v1/contact/", include("contact.api.v1.urls")),
     # API docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),

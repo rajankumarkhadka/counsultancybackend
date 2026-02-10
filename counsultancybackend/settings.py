@@ -46,13 +46,19 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'nested_admin',
+    'corsheaders',
     'django_filters',
     "tinymce",
     "filehub",
+    
     # Your apps
     'blog',
     'event', 
     'contact',
+    'country',
+    'testperperation',
+    'home',
+    
 ]
 
 MIDDLEWARE = [
