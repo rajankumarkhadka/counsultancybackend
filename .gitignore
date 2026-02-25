@@ -4,4 +4,27 @@ db.sqlite3
 .env
 media/
 staticfiles/
+env/
+__pycache__/
+db.sqlite3
+.env
+media/
+staticfiles/
 venv/
+logs/
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.pyc
+*.egg-info/
+dist/
+build/
+DOCKER_DEPLOYMENT.md
+DOCKER_QUICKSTART.md
+# docker-helper.sh
+# entrypoint.sh
+PRODUCTION_COMPLETE_GUIDE.md
+PRODUCTION_DEPLOYMENT.md
+QUICK_START_PRODUCTION.md
+README_PROD_FILES.md

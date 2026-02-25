@@ -1,0 +1,60 @@
+# Docker ignore file - exclude files from Docker image
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Database
+db.sqlite3
+
+# Media files (optional: exclude for smaller images)
+# media/
+
+# Node modules (if using frontend)
+node_modules/
+npm-debug.log
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Cache
+.cache
+.ruff_cache
+
+# Documentation
+docs/_build/
+
+# Temporary files
+*.tmp
+*.bak

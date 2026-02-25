@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 from rest_framework.routers import DefaultRouter
 from event.api.v1.views import EventViewSet
 from blog.api.v1.views import BlogViewSet
@@ -25,9 +27,30 @@ from home.api.v1.views import (
 )
 from django.conf import settings
 from django.conf.urls.static import static
+from django.db import connection
 
 # JWT auth
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+# Health check view
+@require_http_methods(["GET"])
+def health_check(request):
+    """Simple health check endpoint for Docker and monitoring"""
+    try:
+        # Test database connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return JsonResponse({
+            "status": "healthy",
+            "message": "Application is running",
+            "database": "connected"
+        }, status=200)
+    except Exception as e:
+        return JsonResponse({
+            "status": "unhealthy",
+            "message": str(e),
+            "database": "disconnected"
+        }, status=503)
 
 # DRF Spectacular (API docs)
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
@@ -64,6 +87,9 @@ router.register(r"social-media-links", SocialMediaLinkViewSet, basename="social-
 router.register(r"core-values", CoreValueViewSet, basename="core-value")
 router.register(r"about", AboutViewSet, basename="about")
 urlpatterns = [
+    # Health check
+    path('health/', health_check, name='health-check'),
+    
     path('_nested_admin/', include('nested_admin.urls')),
     path('admin/', include('filehub.urls')),
     path('admin/', admin.site.urls),
