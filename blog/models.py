@@ -1,33 +1,26 @@
 from django.db import models
 from django.utils.text import slugify
 from tinymce.models import HTMLField
-from filehub.fields import ImagePickerField  # if using your same image field
+from filehub.fields import ImagePickerField
 
-# --- Blog Type / Category ---
-class BlogType(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+
+class Blog(models.Model):
+    category = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+    published_date = models.DateField()
+    image = ImagePickerField(upload_to="blogs/")
     slug = models.SlugField(unique=True, blank=True, max_length=255)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-# --- Blog Model ---
-class Blog(models.Model):
-    blog_type = models.ForeignKey(BlogType, on_delete=models.CASCADE, related_name='blogs')
-    title = models.CharField(max_length=200)
-    description = HTMLField()  # TinyMCE rich text
-    published_date = models.DateField()
-    image = ImagePickerField(upload_to='blogs/')
-    slug = models.SlugField(unique=True,auto_created=True, blank=False, max_length=255)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+            base = slugify(self.title)
+            slug = base
+            i = 1
+            while Blog.objects.filter(slug=slug).exists():
+                slug = f"{base}-{i}"
+                i += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):

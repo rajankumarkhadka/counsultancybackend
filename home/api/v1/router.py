@@ -1,8 +1,6 @@
 from rest_framework.routers import DefaultRouter
-from .views import (
-    StudyAbroadCardListAPIView,
-    SuccessStoryCardListAPIView,
-    SocialMediaListAPIView,
-    ContactInfoListAPIView
-)
+from .views import *
+
 router = DefaultRouter()
+
+urlpatterns = router.urls

@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from country.models import Country, University, PopularCourse, StudyCost, LivingExpense, VisaRequirement
+from country.models import Country, University, PopularCourse, StudyCost, LivingExpense, VisaRequirement, CountryOverview, KeyHighlight
 from .serializers import (
     CountrySerializer,
     UniversitySerializer,
@@ -7,6 +7,7 @@ from .serializers import (
     StudyCostSerializer,
     LivingExpenseSerializer,
     VisaRequirementSerializer,
+    KeyHighlightSerializer
 )
 
 
@@ -15,6 +16,7 @@ from .serializers import (
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
+    lookup_field = 'slug'
 
 
 class UniversityViewSet(viewsets.ModelViewSet):
@@ -40,3 +42,7 @@ class LivingExpenseViewSet(viewsets.ModelViewSet):
 class VisaRequirementViewSet(viewsets.ModelViewSet):
     queryset = VisaRequirement.objects.all()
     serializer_class = VisaRequirementSerializer
+
+class KeyHighlightViewSet(viewsets.ModelViewSet):
+    queryset = KeyHighlight.objects.all()
+    serializer_class = KeyHighlightSerializer

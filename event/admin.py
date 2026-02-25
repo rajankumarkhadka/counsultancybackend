@@ -4,7 +4,7 @@ from tinymce.widgets import TinyMCE
 from django.utils.html import format_html
 import nested_admin
 
-from .models import EventType, Event, EventAgenda, EventLearning, EventUniversity
+from .models import  Event, EventAgenda, EventLearning, EventUniversity
 
 # ---------------------------
 # Forms for TinyMCE
@@ -37,22 +37,22 @@ class EventUniversityInlineForm(forms.ModelForm):
 # ---------------------------
 # Nested Inlines
 # ---------------------------
-class EventAgendaInline(nested_admin.NestedTabularInline):
+class EventAgendaInline(admin.StackedInline):
     model = EventAgenda
     form = EventAgendaInlineForm
     extra = 1
 
-class EventLearningInline(nested_admin.NestedTabularInline):
+class EventLearningInline(admin.StackedInline):
     model = EventLearning
     form = EventLearningInlineForm
     extra = 1
 
-class EventUniversityInline(nested_admin.NestedTabularInline):
+class EventUniversityInline(admin.StackedInline):
     model = EventUniversity
     form = EventUniversityInlineForm
     extra = 1
 
-class EventInline(nested_admin.NestedStackedInline):
+class EventInline(admin.StackedInline):
     model = Event
     form = EventAdminForm
     extra = 1
@@ -75,9 +75,9 @@ class EventInline(nested_admin.NestedStackedInline):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     form = EventAdminForm
-    list_display = ('title','slug', 'event_type','show_learnings', 'show_agendas', 'show_universities', 'date', 'time', 'location', 'image_display')
-    list_filter = ('event_type', 'date')
-    search_fields = ('title', 'description', 'location')
+    list_display = ('title','slug','category','show_learnings', 'show_agendas', 'show_universities', 'date', 'time', 'location', 'image_display')
+    list_filter = ('category', 'date')
+    search_fields = ('title','category', 'description', 'location')
     prepopulated_fields = {'slug': ('title',)}
     inlines = [EventAgendaInline, EventLearningInline, EventUniversityInline]
 
@@ -101,11 +101,3 @@ class EventAdmin(admin.ModelAdmin):
         return format_html('<span style="color: #888;">No Image</span>')
     image_display.short_description = 'Image'
 
-# ---------------------------
-# EventType Admin with nested Event + agendas, learnings, universities
-# ---------------------------
-@admin.register(EventType)
-class EventTypeAdmin(nested_admin.NestedModelAdmin):
-    list_display = ('name', 'slug')
-    prepopulated_fields = {'slug': ('name',)}
-    inlines = [EventInline]

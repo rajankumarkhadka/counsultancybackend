@@ -25,3 +25,4 @@ def send_contact_received_email(sender, instance, created, **kwargs):
         context=context,
         recipient_list=[instance.email],
     )
+

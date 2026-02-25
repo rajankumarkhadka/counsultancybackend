@@ -12,7 +12,7 @@ class TestCardInline(admin.StackedInline):
 class WhyChooseInline(admin.StackedInline):
     model = WhyChoose
     extra = 1
-
+    
 
 class TestFormatInline(admin.StackedInline):
     model = TestFormat

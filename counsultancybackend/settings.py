@@ -183,32 +183,145 @@ CORS_ALLOWED_ORIGINS = [
 DASHUB_SETTINGS = {
     "site_logo": "/static/logo.svg",
     "site_icon": "/static/favicon.ico",
-    "theme_color": "#31aa98",
+    "theme_color": "#255078",
     "border_radius": "5px",
     "hide_models": [
-        "auth",  # Hides all models in the auth app
-        "auth.group"  # Hides the group model in the auth app
+        "auth", 
+        "auth.group", 
+        "home",
+        "home.contactinfo",
+        "home.socialmedia",
+        "home.studyabroadcard",
+        "home.successstorycard",
+        "home.about",
+        "home.core_value",
+        "home.teammember",
+        "testperperation",
+        "testperperation.testcard",
+        "testperperation.testformat",
+        "testperperation.testpreparation",
+        "testperperation.whychoose",
+        "country",
+        "country.country",
+        "country.popularcourse",
+        "country.studycost",
+        "country.university",
+        "country.livingexpense",
+        "country.visarequirement",
+        "country.keyhighlight",
+        "blog",
+        "blog.blog",
+        "blog.blogtype",
+        "event",
+        "event.event",
+        "event.eventtype",
+        "contact",
+        "contact.contact",  
+        "contact.counselingsession",      
     ],
+    "default_orders": {
+        "auth": 10,
+        "auth.group": 4,
+        "home": 20,
+        "testperperation": 30,
+        "country": 40,
+        "blog": 50,
+        "event": 60,
+        "contact": 70,
+
+        
+    },
     "custom_links": {
         "auth": [
             {
-                "model": "auth.post" # Links directly to the auth.post model
+                "model": "auth.post" 
             },
             {
                 "name": "User Management",
                 "icon": "fa-solid fa-users",
                 "submenu": [
                     {"model": "auth.user", "order": 1},
-                    {"model": "auth.group", "order": 2}
+                    {"model": "auth.group", "order": 2},
+                   
                 ]
-            }
+            },
         ],
+        "Menu": [
+            {
+                "name": "Home",
+                "icon": "fa-solid fa-house",
+                "url": "/admin/home",
+                "submenu": [    
+                    {"name": "Contact Info", "url": "/admin/home/contactinfo", "order": 1},
+                    {"name": "Contact Media","url": "/admin/home/socialmedia/", "order": 2},
+                    {"name": "Study Abroad ", "url": "/admin/home/studyabroadcard/", "order": 3},
+                    {"name": "Success Story ", "url": "/admin/home/successstorycard/", "order": 4},
+                    {"name": "About ", "url": "/admin/home/about/", "order": 5},
+                    {"name": "Core Value ", "url": "/admin/home/core_value/", "order": 6},
+                    {"name": "Team Member ", "url": "/admin/home/teammember/", "order": 7},
+                ],
+            }
+        ,
+            {
+                "name": "Test Preparation",
+                "icon": "fa-solid fa-book",
+                "url": "/admin/testperperation",
+                "submenu": [
+                    {"model": "testperperation.testpreparation", "order": 1},
+                    
+                ],
+            }
+        ,
+            {
+                "name": "Country Info",
+                "icon": "fa-solid fa-globe",
+                "url": "/admin/country",
+                "submenu": [
+                        {"model": "country.country","url": "/admin/country/country/", "order": 1},
+                        {"model": "country.popularcourse","url": "/admin/country/popularcourse/", "order": 2},
+                        {"model": "country.studycost","url": "/admin/country/studycost/", "order": 3},
+                        {"model": "country.university","url": "/admin/country/university/", "order": 4},
+                        {"model": "country.livingexpense","url": "/admin/country/livingexpense/", "order": 5},
+                        {"model": "country.visarequirement","url": "/admin/country/visarequirement/", "order": 6},
+                        {"model": "country.keyhighlight","url": "/admin/country/keyhighlight/", "order": 7},
+                      
+                       ],
+                }
+            ,
+                {
+                    "name": "Blog",
+                    "icon": "fa-solid fa-newspaper",
+                    "url": "/admin/blog",
+                    "submenu": [
+                        {"model": "blog.blog", "order": 1},
+                        {"model": "blog.blogtype", "order": 2},
+                    ],
+                },
+            
+                {
+                    "name": "Event",
+                    "icon": "fa-solid fa-calendar-days",
+                    "url": "/admin/event",
+                    "submenu": [
+                        {"model": "event.event", "order": 1},
+                    ],
+                }
+            ,
+                {
+                    "name": "Contact",
+                    "icon": "fa-solid fa-envelope",
+                    "url": "/admin/contact/contact",
+                    "submenu": [
+                        {"model": "contact.contact", "order": 1},
+                        {"model": "contact.counselingsession", "order": 2},
+                    ],
+                }
+            ],
+
+
     },
     "submenus_models": ["auth.group"],
-    "default_orders": {
-        "auth": 10,
-        "auth.group": 4,
-    },
+   
     "icons": {
         "auth": "fa-regular fa-user",
         "auth.user": "fa-regular fa-user",

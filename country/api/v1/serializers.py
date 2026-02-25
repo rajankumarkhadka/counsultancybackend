@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from country.models import Country, University, PopularCourse, StudyCost, LivingExpense, VisaRequirement, CountryOverview
+from country.models import Country, University, PopularCourse, StudyCost, LivingExpense, VisaRequirement, CountryOverview, KeyHighlight
 
 
 class CountryOverviewSerializer(serializers.ModelSerializer):
@@ -38,6 +38,12 @@ class VisaRequirementSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class KeyHighlightSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KeyHighlight
+        fields = "__all__"
+
+
 # Full Country Data API
 class CountrySerializer(serializers.ModelSerializer):
     overview = CountryOverviewSerializer(read_only=True)
@@ -46,6 +52,7 @@ class CountrySerializer(serializers.ModelSerializer):
     study_costs = StudyCostSerializer(many=True, read_only=True)
     living_expenses = LivingExpenseSerializer(many=True, read_only=True)
     visa_requirements = VisaRequirementSerializer(many=True, read_only=True)
+    key_highlights = KeyHighlightSerializer(many=True, read_only=True)
 
     class Meta:
         model = Country

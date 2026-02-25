@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from event.models import EventType, Event, EventAgenda, EventLearning, EventUniversity
+from event.models import Event, EventAgenda, EventLearning, EventUniversity
 
 # --- Nested serializers ---
 class EventAgendaSerializer(serializers.ModelSerializer):
@@ -27,14 +27,7 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             'id', 'title', 'description', 'icon', 'location', 'date', 'time',
-            'image', 'slug', 'event_type', 'created_at', 'updated_at',
+            'image', 'slug', 'category', 'created_at', 'updated_at',
             'agendas', 'learnings', 'universities'
         )
 
-# --- EventType serializer ---
-class EventTypeSerializer(serializers.ModelSerializer):
-    events = EventSerializer(many=True, read_only=True)  # related_name='events'
-
-    class Meta:
-        model = EventType
-        fields = ('id', 'name', 'slug', 'events')

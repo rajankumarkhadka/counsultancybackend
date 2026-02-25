@@ -2,13 +2,13 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from .models import Contact
+from .models import Contact,CounselingSession
 
 # Register your models here.
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'subject', 'status', 'created_at')
+    list_display = ('name', 'email', 'interested_destination', 'phone_number', 'status', 'created_at')
     list_filter = ('status', 'created_at')
-    search_fields = ('name', 'email', 'subject', 'message')
+    search_fields = ('name', 'email', 'interested_destination', 'message')
     readonly_fields = ('created_at', 'updated_at',)
     exclude = ['ip_address', 'user_agent']
 
@@ -22,3 +22,24 @@ class ContactAdmin(admin.ModelAdmin):
     action_buttons.short_description = 'Actions'
 
 admin.site.register(Contact, ContactAdmin)
+
+
+
+
+@admin.register(CounselingSession)
+class CounselingSessionAdmin(admin.ModelAdmin):
+    list_display = (
+        'full_name',
+        'email',
+        'phone',
+        'interested_country',
+        'study_level',
+        'counseling_mode',
+        'preferred_date',
+        'preferred_time',
+        'status',
+        'created_at',
+    )
+
+    list_filter = ('status', 'counseling_mode', 'interested_country')
+    search_fields = ('full_name', 'email', 'phone')

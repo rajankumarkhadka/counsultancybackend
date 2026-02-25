@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from contact.models import Contact
+from contact.models import Contact, CounselingSession
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,3 +13,10 @@ class ContactSerializer(serializers.ModelSerializer):
             validated_data["ip_address"] = request.META.get("REMOTE_ADDR")
             validated_data["user_agent"] = request.META.get("HTTP_USER_AGENT")
         return super().create(validated_data)
+
+
+class CounselingSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CounselingSession
+        fields = "__all__"
+        read_only_fields = ["id", "status", "created_at"]

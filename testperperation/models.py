@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-
+from tinymce.models import HTMLField
 
 # ================================
 # MAIN TEST PREPARATION
@@ -60,7 +60,7 @@ class WhyChoose(models.Model):
         on_delete=models.CASCADE,
         related_name="why_choose"
     )
-    icon = models.ImageField(upload_to="testprep/icons/", blank=True, null=True)
+    icon = models.CharField(max_length=200, blank=True, null=True)
     title = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
@@ -100,7 +100,7 @@ class CourseCurriculum(models.Model):
     focus_area = models.CharField(max_length=200, blank=True, null=True)
     activities = models.TextField(blank=True, null=True)
     title = models.CharField(max_length=200, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    description = HTMLField(blank=True, null=True)
 
     class Meta:
         ordering = ["week"]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import ContactSerializer
-from contact.models import Contact
+from .serializers import ContactSerializer,CounselingSessionSerializer
+from contact.models import Contact, CounselingSession
 from rest_framework.pagination import PageNumberPagination
 
 class ContactPagination(PageNumberPagination):
@@ -19,3 +19,14 @@ class ContactViewSet(viewsets.ModelViewSet):
     search_fields = ['name', 'email', 'subject', 'message']
     ordering_fields = ['created_at', 'updated_at']
     ordering = ['-created_at']
+
+
+
+class CounselingSessionCreateView(viewsets.ModelViewSet):
+    queryset = CounselingSession.objects.all()
+    serializer_class = CounselingSessionSerializer
+
+
+class CounselingSessionListView(viewsets.ModelViewSet):
+    queryset = CounselingSession.objects.all().order_by("-created_at")
+    serializer_class = CounselingSessionSerializer
