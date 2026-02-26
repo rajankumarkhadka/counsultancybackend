@@ -219,7 +219,7 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
-
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "localhost,127.0.0.1").split(",")
 
 DASHUB_SETTINGS = {
     "site_logo": "/static/logo.svg",
@@ -383,14 +383,6 @@ DASHUB_SETTINGS = {
 FILEHUB_LOGIN_URL = "/login/"
 
 
-# File type categories
-FILE_TYPE_CATEGORIES = {
-    'images': ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'],
-    'videos': ['mp4', 'webm', 'ogg', 'avi', 'mkv', 'mov', 'wmv', '3gp', 'mpeg', 'mpg4'],
-    'musics': ['mp3', 'wav', 'flac', 'aac', 'wma', 'm4a'],
-    'archives': ['zip', 'rar', 'tar', 'gz']
-}
-
 TINYMCE_DEFAULT_CONFIG = {
     "height": 300,
     "width": "100%",
@@ -399,61 +391,3 @@ TINYMCE_DEFAULT_CONFIG = {
     "toolbar": "undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image media | code fullscreen preview",
     "images_upload_url": "/tinymce/upload/",
 }
-
-# Logging Configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {asctime} {message}',
-            'style': '{',
-        },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
-            'backupCount': 10,
-            'formatter': 'verbose',
-        },
-        'mail_admins': {
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['require_debug_false'],
-            'level': 'ERROR',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['mail_admins', 'file'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-    },
-}
-
-# Create logs directory if it doesn't exist
-import os as os_module
-os_module.makedirs(BASE_DIR / 'logs', exist_ok=True)
