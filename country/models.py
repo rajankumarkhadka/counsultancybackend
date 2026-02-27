@@ -7,16 +7,18 @@ from tinymce.models import HTMLField
 # MAIN COUNTRY MODEL
 # ================================
 class Country(models.Model):
-    country_name = models.CharField(max_length=200)
+    country_name = models.CharField(max_length=200, db_index=True)
     total_students = models.PositiveIntegerField()
     subtitle = models.CharField(max_length=300, blank=True)
-    slug = models.SlugField(unique=True, blank=False, max_length=255)
+    slug = models.SlugField(unique=True, blank=False, max_length=255, db_index=True)
+    
     def __str__(self):
         return self.country_name
 
     class Meta:
         verbose_name = "Country"           # Singular name
         verbose_name_plural = "Countries"  # Plural name
+        ordering = ['country_name']
 
 
 # ================================

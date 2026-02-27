@@ -98,11 +98,6 @@ urlpatterns = [
     # JWT auth
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-
-    # API v1
-    path("api/v1/event/", include("event.api.v1.urls")),
-    path("api/v1/blog/", include("blog.api.v1.urls")),
-    path("api/v1/contact/", include("contact.api.v1.urls")),
     
    # API docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),

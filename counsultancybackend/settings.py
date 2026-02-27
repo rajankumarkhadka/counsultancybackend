@@ -30,7 +30,19 @@ if not SECRET_KEY:
     )
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "launchpadglobal.com.np,www.launchpadglobal.com.np").split(",")
+
+
+def _normalize_origin_list(origins):
+    normalized = []
+    for origin in origins:
+        origin = origin.strip()
+        if not origin:
+            continue
+        if "://" not in origin:
+            origin = f"http://{origin}"
+        normalized.append(origin)
+    return normalized
 
 # Environment check
 if not DEBUG and "localhost" in ALLOWED_HOSTS:
@@ -85,10 +97,21 @@ MIDDLEWARE = [
 # In production, always restrict to specific origins
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all origins in development
 
+default_cors = "https://launchpadglobal.com.np,https://www.launchpadglobal.com.np"
 CORS_ALLOWED_ORIGINS = os.getenv(
     "CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000"
+    default_cors
 ).split(",") if not DEBUG else ["http://localhost:3000", "http://127.0.0.1:3000"]
+CORS_ALLOWED_ORIGINS = _normalize_origin_list(CORS_ALLOWED_ORIGINS)
+
+# CSRF Configuration for Cross-Origin Requests
+# Required for POST/PUT/DELETE requests from frontend
+default_csrf = "https://launchpadglobal.com.np,https://www.launchpadglobal.com.np"
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    default_csrf
+).split(",") if not DEBUG else ["http://localhost:3000", "http://127.0.0.1:3000"]
+CSRF_TRUSTED_ORIGINS = _normalize_origin_list(CSRF_TRUSTED_ORIGINS)
 
 ROOT_URLCONF = 'counsultancybackend.urls'
 
@@ -123,6 +146,30 @@ DATABASES = {
         'PORT': os.getenv("DB_PORT", 5432),
     }
 }
+
+# Cache Configuration
+if not DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': os.getenv('REDIS_URL', 'redis://redis:6379/1'),
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+                'CONNECTION_POOL_KWARGS': {'max_connections': 50},
+                'SOCKET_CONNECT_TIMEOUT': 5,
+                'SOCKET_TIMEOUT': 5,
+            },
+            'KEY_PREFIX': 'consultancy',
+            'TIMEOUT': 300,  # Default timeout: 5 minutes
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-local',
+        }
+    }
 
 
 # Password validation
@@ -172,13 +219,38 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-
-    # 🔥 Allow public access by default
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.AllowAny",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
 }
 
+# Throttling: Only enable in production
+if not DEBUG:
+    REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"] = [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ]
+
+    REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
+        # global
+        "anon": "300/hour",
+        "user": "2000/hour",
+
+        # burst protection ⭐ IMPORTANT
+        "anon_burst": "30/min",
+        "user_burst": "100/min",
+
+        # sensitive endpoints
+        "contact": "10/hour",
+        "counseling": "5/hour",
+    }
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
@@ -219,8 +291,6 @@ else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
-
-CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "localhost,127.0.0.1").split(",")
 
 DASHUB_SETTINGS = {
     "site_logo": "/static/logo.svg",
@@ -410,7 +480,7 @@ LOGGING = {
 
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "class": "logging.StreamHandler",
             "stream": sys.stdout,
             "formatter": "verbose",
@@ -419,18 +489,23 @@ LOGGING = {
 
     "root": {
         "handlers": ["console"],
-        "level": "DEBUG",
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
     },
 
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": False,
         },
         "django.request": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+        "django.utils.autoreload": {
+            "handlers": ["console"],
+            "level": "WARNING",
             "propagate": False,
         },
     },

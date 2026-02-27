@@ -33,3 +33,5 @@ sqlparse==0.5.5
 standard-imghdr==3.13.0
 uritemplate==4.2.0
 urllib3==2.6.3
+redis==5.0.1
+django-redis==5.4.0
