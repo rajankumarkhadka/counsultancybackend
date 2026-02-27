@@ -468,30 +468,21 @@ import sys
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(name)s %(module)s %(process)d %(thread)d %(message)s",
-        },
-        "simple": {
-            "format": "%(levelname)s %(message)s",
+            "format": "%(levelname)s %(asctime)s %(name)s %(message)s",
         },
     },
-
     "handlers": {
         "console": {
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "class": "logging.StreamHandler",
-            "stream": sys.stdout,
             "formatter": "verbose",
         },
     },
-
     "root": {
         "handlers": ["console"],
         "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
     },
-
     "loggers": {
         "django": {
             "handlers": ["console"],
@@ -500,10 +491,10 @@ LOGGING = {
         },
         "django.request": {
             "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "level": "ERROR",
             "propagate": False,
         },
-        "django.utils.autoreload": {
+        "django.db.backends": {
             "handlers": ["console"],
             "level": "WARNING",
             "propagate": False,
