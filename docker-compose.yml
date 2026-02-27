@@ -31,7 +31,6 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: counsultancy_web
-    entrypoint: /app/entrypoint.sh
     env_file:
       - .env
     volumes:
