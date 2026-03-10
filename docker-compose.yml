@@ -75,6 +75,7 @@ services:
   nginx-static:
     image: nginx:alpine
     container_name: launchpad_nginx_static
+    user: root
     volumes:
       - ./nginx/static.conf:/etc/nginx/conf.d/default.conf:ro
       - static_volume:/app/public/static/
