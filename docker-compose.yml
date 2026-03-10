@@ -2,7 +2,6 @@ services:
   db:
     image: postgres:17-alpine
     container_name: launchpad-postgres
-    hostname: launchpad-db
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -10,7 +9,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:5433:5432"
     networks:
       - dokploy-network
     restart: always
