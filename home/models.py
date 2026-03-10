@@ -1,6 +1,8 @@
 from django.db import models
 from filehub.fields import ImagePickerField
 from tinymce.models import HTMLField
+from solo.models import SingletonModel
+
 # -----------------------------
 # Study Abroad Card
 # -----------------------------
@@ -51,7 +53,7 @@ class SocialMedia(models.Model):
 # -----------------------------
 # Contact Info
 # -----------------------------
-class ContactInfo(models.Model):
+class ContactInfo(SingletonModel):
     location = models.CharField(max_length=200)
     phone = models.CharField(max_length=50)
     address = models.TextField()

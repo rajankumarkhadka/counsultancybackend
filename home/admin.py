@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import StudyAbroadCard, SuccessStoryCard, SocialMedia, ContactInfo,TeamMember, SocialMediaLink,Core_value, About
+from solo.admin import SingletonModelAdmin
 
 # ================================
 # STUDY ABROAD CARD
@@ -64,7 +65,7 @@ class SocialMediaAdmin(admin.ModelAdmin):
 # CONTACT INFO
 # ================================
 @admin.register(ContactInfo)
-class ContactInfoAdmin(admin.ModelAdmin):
+class ContactInfoAdmin(SingletonModelAdmin):
     list_display = ( 'phone', 'email', 'address',)
     search_fields = ('location', 'phone', 'address')
     fieldsets = (

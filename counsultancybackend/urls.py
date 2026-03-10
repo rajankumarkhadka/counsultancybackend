@@ -37,7 +37,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 def health_check(request):
     """Simple health check endpoint for Docker and monitoring"""
     try:
-        # Test database connection
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
         return JsonResponse({
@@ -52,12 +51,7 @@ def health_check(request):
             "database": "disconnected"
         }, status=503)
 
-# DRF Spectacular (API docs)
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
-
-# Central router import (optional)
-# from launchpad.api.router import router
-# router.registry.extend(tasks_router.registry)  # if using central router
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet, basename='event')
@@ -87,7 +81,6 @@ router.register(r"social-media-links", SocialMediaLinkViewSet, basename="social-
 router.register(r"core-values", CoreValueViewSet, basename="core-value")
 router.register(r"about", AboutViewSet, basename="about")
 urlpatterns = [
-    # Health check
     path('health/', health_check, name='health-check'),
     
     path('_nested_admin/', include('nested_admin.urls')),
@@ -99,7 +92,7 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     
-   # API docs
+    # API docs
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),

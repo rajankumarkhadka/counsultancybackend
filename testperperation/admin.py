@@ -16,6 +16,7 @@ class WhyChooseInline(admin.StackedInline):
 
 class TestFormatInline(admin.StackedInline):
     model = TestFormat
+    fields = (('title', 'time', 'question_type',), ('description', 'topics_covered'),)
     extra = 1
 
 

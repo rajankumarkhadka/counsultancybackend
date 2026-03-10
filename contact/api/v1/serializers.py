@@ -20,3 +20,4 @@ class CounselingSessionSerializer(serializers.ModelSerializer):
         model = CounselingSession
         fields = "__all__"
         read_only_fields = ["id", "status", "created_at"]
+        

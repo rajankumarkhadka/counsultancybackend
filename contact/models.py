@@ -7,7 +7,11 @@ class Contact(models.Model):
     interested_destination = models.CharField(max_length=200)
     message = models.TextField()
     phone_number = models.CharField(max_length=20, blank=True)
-    status = models.CharField(max_length=20, default='pending', db_index=True)
+    status = models.CharField(max_length=20, default='pending', db_index=True, choices=[
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('cancelled', 'Cancelled'),
+    ])
     ip_address = models.GenericIPAddressField(blank=True, null=True)
     user_agent = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
