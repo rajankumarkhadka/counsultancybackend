@@ -59,6 +59,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.launchpad-backend.rule=Host(`portal.launchpadglobal.com.np`)
+      - traefik.http.routers.launchpad-backend.entrypoints=web
+      - traefik.http.routers.launchpad-backend.middlewares=redirect-to-https@file
+      - traefik.http.routers.launchpad-backend.service=launchpad-backend
+      - traefik.http.routers.launchpad-backend-secure.rule=Host(`portal.launchpadglobal.com.np`)
+      - traefik.http.routers.launchpad-backend-secure.entrypoints=websecure
+      - traefik.http.routers.launchpad-backend-secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.launchpad-backend-secure.service=launchpad-backend
+      - traefik.http.services.launchpad-backend.loadbalancer.server.port=8000
 
   nginx-static:
     image: nginx:alpine
@@ -72,6 +84,18 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.launchpad-static.rule=Host(`cdn.launchpadglobal.com.np`)
+      - traefik.http.routers.launchpad-static.entrypoints=web
+      - traefik.http.routers.launchpad-static.middlewares=redirect-to-https@file
+      - traefik.http.routers.launchpad-static.service=launchpad-static
+      - traefik.http.routers.launchpad-static-secure.rule=Host(`cdn.launchpadglobal.com.np`)
+      - traefik.http.routers.launchpad-static-secure.entrypoints=websecure
+      - traefik.http.routers.launchpad-static-secure.tls.certresolver=letsencrypt
+      - traefik.http.routers.launchpad-static-secure.service=launchpad-static
+      - traefik.http.services.launchpad-static.loadbalancer.server.port=80
 
 networks:
   dokploy-network:
